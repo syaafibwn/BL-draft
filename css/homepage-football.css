@@ -1,14 +1,20 @@
-/* Decorative 3D football layer for the landing-page hero. */
+/* Decorative 3D football fixed to the viewport on the landing page. */
+.menu-screen{position:relative;z-index:1}
 .home-hero--football{isolation:isolate}
-.home-football-canvas{position:absolute;z-index:0;left:34%;top:-58px;width:min(62%,720px);height:470px;display:block;pointer-events:none;opacity:.96;mix-blend-mode:screen;overflow:visible}
+.home-football-canvas{
+  position:fixed;z-index:0;right:-47vw;top:-5vh;
+  width:150vw;height:110vh;display:block;pointer-events:none;
+  opacity:.96;mix-blend-mode:screen;overflow:visible;
+}
+body:not(.home-football-active) .home-football-canvas{visibility:hidden}
 .home-hero-copy,.home-art{position:relative;z-index:1}
 .home-art{background:linear-gradient(130deg,rgba(11,35,54,.77),rgba(6,19,32,.68) 74%);backdrop-filter:blur(1px)}
 .home-football-canvas:focus{outline:none}
-html[data-theme="light"] .home-football-canvas{opacity:.78;mix-blend-mode:multiply}
+html[data-theme="light"] .home-football-canvas{opacity:.72;mix-blend-mode:multiply}
 html[data-theme="light"] .home-art{background:linear-gradient(130deg,rgba(8,29,46,.86),rgba(6,19,32,.78) 74%)}
 @media(max-width:760px){
-  .home-football-canvas{left:2%;right:-4%;top:-28px;width:100%;height:350px;opacity:.42;mix-blend-mode:screen}
-  html[data-theme="light"] .home-football-canvas{opacity:.24;mix-blend-mode:multiply}
+  .home-football-canvas{right:-63vw;top:-3vh;width:175vw;height:106vh;opacity:.72;mix-blend-mode:screen}
+  html[data-theme="light"] .home-football-canvas{opacity:.48;mix-blend-mode:multiply}
   .home-art{backdrop-filter:none}
 }
 @media(prefers-reduced-motion:reduce){.home-football-canvas{opacity:.3}}
