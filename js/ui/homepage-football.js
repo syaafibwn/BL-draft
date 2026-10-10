@@ -104,21 +104,21 @@
     if (!hero||hero.dataset.footballReady) return;
     hero.dataset.footballReady="true";
     hero.classList.add("home-hero--football");
-    const canvas=document.createElement("canvas");canvas.className="home-football-canvas";canvas.setAttribute("aria-hidden","true");canvas.width=1;canvas.height=1;hero.prepend(canvas);
+    const canvas=document.createElement("canvas");canvas.className="home-football-canvas";canvas.setAttribute("aria-hidden","true");canvas.width=1;canvas.height=1;document.body.appendChild(canvas);
     const ctx=canvas.getContext("2d",{alpha:true,desynchronized:true});if(!ctx)return;
     const records=typeof players!=="undefined"?players:[];
     const portrait=i=>{if(!records.length)return null;const p=records[(i*7+3)%records.length];return typeof playerImageUrl==="function"?playerImageUrl(p):p.image;};
     const faces=buildFaces(),hex=faces.filter(f=>f.isHex);
     hex.forEach((f,i)=>{f.media=mediaFor(CLIPS[i],portrait(i));});
-    let width=0,height=0,dpr=1,raf=0,visible=false,last=0;
+    let width=0,height=0,dpr=1,raf=0,visible=false,homeActive=false,last=0;
     function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;dpr=Math.min(window.devicePixelRatio||1,1.5);width=Math.round(r.width*dpr);height=Math.round(r.height*dpr);if(canvas.width!==width||canvas.height!==height){canvas.width=width;canvas.height=height;if(reduced)draw(performance.now());else run();}}
     function stop(){if(raf)cancelAnimationFrame(raf);raf=0;hex.forEach(f=>{if(f.media.kind==="video")f.media.src.pause();});}
-    function run(){if(raf||!visible||document.hidden||reduced)return;raf=requestAnimationFrame(tick);}
-    function tick(t){raf=0;if(!visible||document.hidden)return;if(t-last>33){draw(t);last=t;}run();}
+    function run(){if(raf||!visible||!homeActive||document.hidden||reduced)return;raf=requestAnimationFrame(tick);}
+    function tick(t){raf=0;if(!visible||!homeActive||document.hidden)return;if(t-last>33){draw(t);last=t;}run();}
     function draw(t){
       if(!width||!height)return;
       ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,width,height);
-      const focal=Math.min(width,height)*.93,y=reduced?-.3:t*.00022-.3,x=reduced?.17:.17+Math.sin(t*.0002)*.07;
+      const focal=Math.min(width,height)*2.6,y=reduced?-.3:t*.00022-.3,x=reduced?.17:.17+Math.sin(t*.0002)*.07;
       const projectPoint=p=>{const q=rotate(p,y,x),s=focal/(3.2-q.z);return {x:width*.5+q.x*s,y:height*.49-q.y*s,z:q.z};};
       const front=[];
       faces.forEach(f=>{
@@ -158,14 +158,21 @@
         }
       });
     }
-    const ro=typeof ResizeObserver==="function"?new ResizeObserver(resize):null;ro?.observe(hero);ro?.observe(canvas);
+    const ro=typeof ResizeObserver==="function"?new ResizeObserver(resize):null;ro?.observe(canvas);
     const io=typeof IntersectionObserver==="function"?new IntersectionObserver(entries=>{visible=!!entries[0]?.isIntersecting;if(visible){resize();if(reduced)draw(performance.now());else run();}else stop();},{rootMargin:"100px"}):null;
     if(io)io.observe(canvas);else visible=true;
-    new MutationObserver(()=>{resize();if(canvas.getBoundingClientRect().width){visible=true;if(reduced)draw(performance.now());else run();}else{visible=false;stop();}}).observe(document.getElementById("menu-screen")||hero,{attributes:true,attributeFilter:["class"]});
+    const menuScreen=document.getElementById("menu-screen")||hero;
+    function syncHomeVisibility(){
+      homeActive=!menuScreen.classList.contains("hidden");
+      document.body.classList.toggle("home-football-active",homeActive);
+      if(homeActive){resize();if(reduced)draw(performance.now());else run();}
+      else stop();
+    }
+    new MutationObserver(syncHomeVisibility).observe(menuScreen,{attributes:true,attributeFilter:["class"]});
     window.addEventListener("resize",resize,{passive:true});
     document.addEventListener("visibilitychange",()=>document.hidden?stop():(reduced?draw(performance.now()):run()));
     if(reducedQuery)reducedQuery.addEventListener("change",e=>{reduced=e.matches;if(reduced){stop();draw(performance.now());}else run();});
-    resize();if(!io){if(reduced)draw(performance.now());else run();}
+    syncHomeVisibility();resize();if(!io&&homeActive){if(reduced)draw(performance.now());else run();}
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
 })();
