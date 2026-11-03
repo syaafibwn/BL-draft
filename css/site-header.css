@@ -211,3 +211,6 @@ html[data-theme="dark"] .site-header-brand-logo[data-logo-theme="dark"],html[dat
 :root[data-header-tight] .directory-item,:root[data-header-tight] .directory-width-probe .directory-item,:root[data-header-tight] .directory-group>summary.directory-item{padding-inline:5px;font-size:12px;letter-spacing:0}
 :root[data-header-tight]:not([data-header-compact]) .sound-toggle strong{display:none}
 :root[data-header-tight] .site-directory{gap:0}
+
+/* Match the page-shell gutter used by the other screens on Battle Sim pages. */
+#battle-sim-screen > .page-context{width:calc(100% - var(--shell-gutter) - var(--shell-gutter))}

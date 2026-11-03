@@ -17,7 +17,7 @@
 .bs-mini-button{padding:7px 9px;font-size:10px;letter-spacing:.06em;white-space:nowrap}
 .bs-team-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
 .bs-team-card,.bs-match-team-panel,.bs-pitch-panel,.bs-live-feed-panel,.bs-result-team-card,.bs-ratings-team,.bs-stoppage-panel,.bs-archive-panel{background:var(--bg-surface,#07111c);border:1px solid var(--border-subtle,#203b54);border-radius:12px;min-width:0;overflow:hidden}
-.bs-team-card{padding:18px;box-shadow:inset 0 2px 0 var(--bs-team-color,#19a7ff)}
+.bs-team-card{padding:18px}
 .bs-team-card-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}
 .bs-team-card-heading h2{font:900 italic clamp(20px,2.5vw,29px)/1 "Barlow Condensed",sans-serif;margin:0;color:var(--text-primary,#eaf2ff);overflow-wrap:anywhere}
 .bs-team-identity{display:grid;grid-template-columns:minmax(0,1fr) 80px;gap:10px;margin-bottom:15px}
